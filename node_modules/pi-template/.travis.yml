@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - "8"
+  - "10"
+
+cache: yarn
+install: yarn
+# script:
+#   - yarn test
+
+jobs:
+  include:
+    - stage: npm release
+      if: tag IS present
+      node_js: "8"
+      # script: yarn compile
+      # before_deploy:
+      #   - cd build
+      deploy:
+        provider: npm
+        email: "$NPM_EMAIL"
+        api_key: "$NPM_TOKEN"
+        skip_cleanup: true
+        on:
+          tags: true
+
+
+notifications:
+  email:
+    recipients:
+    - giorgio.seregni@pingendo.com
+    on_success: never
+    on_failure: always
